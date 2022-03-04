@@ -75,6 +75,7 @@ while [[ "${1}" != "" ]]; do
             ;;
         -u|--url)
             AUR_GIT_URI=${2%/}
+            url_set=true
             shift
             ;;
         log)
@@ -142,6 +143,20 @@ if (( LOG )); then
     shift
     git log "${log_pre_opts[@]}" $(git subtree split -P "${package}") "$@"
     exit 0
+fi
+
+# warn the user if they have a non-default ssh alias for 'aur'
+if [[ "$url_set" != "true" ]]; then
+    auralias=$(ssh -G aur | awk '$1 == "hostname" { print $2 }')
+    if [[ "$auralias" != 'aur' && "$auralias" != 'aur.archlinux.org' ]]; then
+        echo "Warning: You have a non-default alias for 'aur' in your ssh configuration. (${auralias})"
+        echo "Previous versions of aurpublish used the 'aur' ssh hostname, but you should now use the --url option."
+        echo ""
+        echo "This operation will use the git server at: ${AUR_GIT_URI}"
+        echo ""
+        read -p "Do you wish to continue? [y/n] " userwarned
+        [[ $userwarned == [yY] ]] || exit 1
+    fi
 fi
 
 pkgbase="$(sed -rn 's/pkgbase = (.*)/\1/p' "${package}"/.SRCINFO 2>/dev/null)"
