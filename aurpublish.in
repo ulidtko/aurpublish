@@ -22,6 +22,8 @@ usage() {
 		                      and a second copy of all commits in the subtree.
 		                      For more details, see the "--rejoin" option in git
 		                      subtree.
+            -u, --url       Specify the URL of the server that should be used
+                              for git operations.
 		    -h, --help      Show this usage message
 
 		COMMANDS
@@ -70,6 +72,10 @@ while [[ "${1}" != "" ]]; do
             ;;
         -s|--speedup)
             SPEEDUP=1
+            ;;
+        -u|--url)
+            AUR_GIT_URI=${2%/}
+            shift
             ;;
         log)
             LOG=1
