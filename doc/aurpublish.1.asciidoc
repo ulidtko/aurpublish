@@ -49,6 +49,9 @@ Options
         commits in the subtree. For more details, see the "--rejoin"
         option in linkman:git-subtree[1].
 
+*-u*, *--url* <URL>::
+        Specify the URL of the server that should be used for git operations.
+
 *-h*, *--help*::
         Prints a usage page.
 
@@ -79,6 +82,9 @@ aurpublish ansible-core-git::
 
 aurpublish log::
         View the git log of a package subtree.
+
+aurpublish --url ssh://me@example.com ansible-core-git::
+        Push the subtree to a server at ssh://example.com.
 
 AUTHORS
 -------
